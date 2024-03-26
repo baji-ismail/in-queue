@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "simple-queue",
+  "name": "in-queue",
   "version": "1.0.0",
   "description": "A simple queue data structure implementation in TypeScript.",
   "main": "./src/queue.js",
@@ -15,11 +15,12 @@
     "line",
     "fifo",
     "data-structure",
-    "simple-queue"
+    "simple-queue",
+    "in-queue"
   ],
   "author": "bajiismail",
   "license": "MIT",
-  "repository": "https://github.com/baji-ismail/simple-queue.git",
+  "repository": "https://github.com/baji-ismail/in-queue.git",
   "devDependencies": {
     "typescript": "^5.4.3"
   }
