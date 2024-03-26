@@ -2,7 +2,7 @@
   "type": "module",
   "name": "simple-queue",
   "version": "1.0.0",
-  "description": "A queue implementation that allows waiting for items to be available.",
+  "description": "A simple queue data structure implementation in TypeScript.",
   "main": "./src/queue.js",
   "scripts": {
     "build": "tsc"
@@ -13,7 +13,9 @@
     "task",
     "lineup",
     "line",
-    "fifo"
+    "fifo",
+    "data-structure",
+    "simple-queue"
   ],
   "author": "bajiismail",
   "license": "MIT",
