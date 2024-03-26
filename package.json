@@ -1,0 +1,23 @@
+{
+  "type": "module",
+  "name": "simple-queue",
+  "version": "1.0.0",
+  "description": "A queue implementation that allows waiting for items to be available.",
+  "main": "./src/queue.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "queue",
+    "wait",
+    "task",
+    "lineup",
+    "line",
+    "fifo"
+  ],
+  "author": "bajiismail",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.4.3"
+  }
+}
