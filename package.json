@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "in-queue",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A simple queue data structure implementation in TypeScript.",
   "main": "./src/queue.js",
   "scripts": {

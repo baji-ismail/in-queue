@@ -74,15 +74,15 @@ This method adds an item to the queue, waiting if the queue is currently full. I
 
 - **push_nowait(item)** - Adds an item to the queue if the queue is not full. If the queue is full, it throws an error.
 
-      ```javascript
-      // Add an item to the queue without waiting
-      try {
-          queue.push_nowait(item);
-          console.log(`Successfully added ${item}`);
-      } catch (error) {
-          console.error("Queue is full");
-      }
-      ```
+  ```javascript
+  // Add an item to the queue without waiting
+  try {
+    queue.push_nowait(item);
+    console.log(`Successfully added ${item}`);
+  } catch (error) {
+    console.error("Queue is full");
+  }
+  ```
 
   This method is useful when you want to add an item to the queue without waiting for a slot to become available. If the queue is full, it throws an error, allowing you to handle full queue conditions appropriately.
 
@@ -101,15 +101,15 @@ This method removes and returns the next item from the queue, waiting if the que
 
 - **get_nowait()** - Removes and returns an item from the queue if the queue is not empty. If the queue is empty, it returns undefined.
 
-      ```javascript
-      // Remove an item from the queue without waiting
-      const item = queue.get_nowait();
-      if (item !== undefined) {
-          console.log(`Got item: ${item}`);
-      } else {
-          console.log("Queue is empty");
-      }
-      ```
+  ```javascript
+  // Remove an item from the queue without waiting
+  const item = queue.get_nowait();
+  if (item !== undefined) {
+    console.log(`Got item: ${item}`);
+  } else {
+    console.log("Queue is empty");
+  }
+  ```
 
   This method is useful when you want to retrieve an item from the queue without waiting for it to become available. If the queue is empty, it returns undefined, allowing you to handle empty queue conditions appropriately.
 
