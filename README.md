@@ -233,16 +233,6 @@ This method returns true if the queue is full (reached its maximum size), and fa
 
 This method returns the current number of items in the queue. It can be used to determine the size of the queue at any given moment.
 
-- **on()** - Returns the number of items in the queue.
-
-  ```javascript
-  // Get the number of items in the queue
-  const size = queue.qsize();
-  console.log(`Queue size: ${size}`);
-  ```
-
-This method returns the current number of items in the queue. It can be used to determine the size of the queue at any given moment.
-
 - **on(event: string, listener: Function)** - Registers an event listener for the specified event. When the event is emitted, the listener function will be called with the emitted arguments.
 
   - `itemRemoved` - Emitted when an item is removed from the queue.
