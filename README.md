@@ -86,6 +86,31 @@ This method adds an item to the queue, waiting if the queue is currently full. I
 
   This method is useful when you want to add an item to the queue without waiting for a slot to become available. If the queue is full, it throws an error, allowing you to handle full queue conditions appropriately.
 
+- **push(item)** - Adds an item to the queue. If the queue is full, it will wait until a slot is available.
+
+  ```javascript
+  // Append items to the queue
+  async function append(item) {
+    await queue.push(item);
+    console.log(`Successfully appended ${item}`);
+  }
+  ```
+
+This method adds an item to the queue, waiting if the queue is currently full. It is useful for adding items to the queue in a synchronous manner, ensuring that the queue does not exceed its maximum size.
+
+- **pushBatch(arrayValues)** - Adds an array of items to the queue. If the queue is full, it will wait until slots are available.
+
+```typescript
+// Push an array of items to the queue
+async function pushItems(values: T[]) {
+  await queue.pushBatch(values);
+  console.log(`Successfully pushed ${values.length} items to the queue`);
+}
+pushItems([1, 2, 3, 4, 5]);
+```
+
+This explanation highlights that `pushBatch` allows you to push multiple items to the queue at once, and it will wait for space to become available if the queue is full.
+
 - **get()** - Removes and returns an item from the queue. If the queue is empty, it will wait until an item is available.
 
   ```javascript
