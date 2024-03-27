@@ -1,9 +1,17 @@
+
 class Queue<T> {
   private maxsize: number;
   private isClear: boolean;
   private items: T[];
   private waiting: (() => void)[];
   private waitingPush: (() => void)[];
+
+  async *[Symbol.asyncIterator](): AsyncIterableIterator<T> {
+    let queue = this;
+    while (true) {
+      yield await queue.get();
+    }
+  }
 
   constructor({ maxsize = 0 }: { maxsize?: number } = {}) {
     this.maxsize = maxsize;

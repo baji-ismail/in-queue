@@ -113,6 +113,44 @@ This method removes and returns the next item from the queue, waiting if the que
 
   This method is useful when you want to retrieve an item from the queue without waiting for it to become available. If the queue is empty, it returns undefined, allowing you to handle empty queue conditions appropriately.
 
+- **async \*[Symbol.asyncIterator]()** - Returns an asynchronous iterable iterator that allows consuming items from the queue as they become available.
+
+  ```javascript
+  import Queue from "in-queue";
+  // Sleep function to simulate asynchronous behavior
+  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  // Create a new Queue instance
+  const queue = new Queue<number>();
+
+  // Consumer function that consumes items from the queue
+  async function consumer() {
+    console.log("Consumer started and waiting for items in the queue");
+    for await (const item of queue) {
+      console.log("Consumed:", item);
+    }
+  }
+
+  // Producer function that produces items and adds them to the queue
+  async function producer() {
+    for (let i = 0; i < 5; i++) {
+      await queue.push(i);
+      console.log("Produced:", i);
+    }
+  }
+
+  // Start the consumer
+  consumer();
+
+  // Wait for 10 seconds (to give time for the consumer to start)
+  await sleep(10000);
+
+  // Start the producer
+  producer();
+  ```
+
+  This method returns an asynchronous iterable iterator that can be used to consume items from the queue as they become available. It can be used with the for await...of loop to iterate over items in the queue.
+
 - **peek()** - Returns the next item in the queue without removing it. If the queue is empty, it returns undefined.
 
   ```javascript
