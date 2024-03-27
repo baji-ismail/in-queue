@@ -232,3 +232,95 @@ This method returns true if the queue is full (reached its maximum size), and fa
   ```
 
 This method returns the current number of items in the queue. It can be used to determine the size of the queue at any given moment.
+
+- **on()** - Returns the number of items in the queue.
+
+  ```javascript
+  // Get the number of items in the queue
+  const size = queue.qsize();
+  console.log(`Queue size: ${size}`);
+  ```
+
+This method returns the current number of items in the queue. It can be used to determine the size of the queue at any given moment.
+
+- **on(event: string, listener: Function)** - Registers an event listener for the specified event. When the event is emitted, the listener function will be called with the emitted arguments.
+
+  - `itemRemoved` - Emitted when an item is removed from the queue.
+
+  ```javascript
+  // Example usage of 'itemRemoved' event
+  queue.on("itemRemoved", (item) => {
+    console.log(`Item removed: ${item}`);
+  });
+
+  // Remove an item from the queue
+  const removedItem = await queue.get();
+  // The 'itemRemoved' event will be emitted with the removed item when the item is successfully removed from the queue.
+  ```
+
+  - `itemsRemoved` - Emitted when multiple items are removed from the queue using getBatch.
+
+  ```javascript
+  // Example usage of 'itemsRemoved' event
+  queue.on("itemsRemoved", (items) => {
+    console.log(`Items removed: ${items}`);
+  });
+
+  // Remove a batch of items from the queue
+  const removedItems = await queue.getBatch(3);
+  // The 'itemsRemoved' event will be emitted with the removed items when the items are successfully removed from the queue.
+  ```
+
+  - `itemPushed` - Emitted when an item is pushed to the queue.
+
+  ```javascript
+  // Example usage of 'itemPushed' event
+  queue.on("itemPushed", (item) => {
+    console.log(`Item pushed: ${item}`);
+  });
+
+  // Push an item to the queue
+  await queue.push(42);
+  // The 'itemPushed' event will be emitted with the pushed item when the item is successfully added to the queue.
+  ```
+
+  - `itemsPushed` - Emitted when multiple items are pushed to the queue.
+
+  ```javascript
+  // Example usage of 'itemsPushed' event
+  queue.on("itemsPushed", (items) => {
+    console.log(`Items pushed: ${items}`);
+  });
+
+  // Push multiple items to the queue
+  await queue.pushBatch([1, 2, 3]);
+  // The 'itemsPushed' event will be emitted with the pushed items when all items are successfully added to the queue.
+  ```
+
+  - `queueCleared` - Emitted when all items are removed from the queue, clearing the queue.
+
+  ```javascript
+  // Example usage of 'queueCleared' event
+  queue.on("queueCleared", () => {
+    console.log(`Queue cleared`);
+  });
+
+  // Clear the queue
+  queue.clear();
+  // The 'queueCleared' event will be emitted when all items are successfully removed from the queue, clearing it.
+  ```
+
+  - `sizeChanged` - Emitted when the maximum size of the queue is changed using the setSize method.
+
+  ```javascript
+  // Example usage of 'sizeChanged' event
+  queue.on("sizeChanged", () => {
+    console.log(`Queue size changed`);
+  });
+
+  // Change the size of the queue
+  queue.setSize(10);
+  // The 'sizeChanged' event will be emitted when the size of the queue is successfully changed.
+  ```
+
+This method allows you to listen for specific events that occur in the queue, such as when an item is pushed or removed. The listener function can perform actions based on these events, providing a way to react to changes in the queue.

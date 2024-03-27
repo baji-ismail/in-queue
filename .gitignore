@@ -7,7 +7,7 @@
 
 # testing
 /coverage
-
+/src/queue.js
 # production
 /build
 

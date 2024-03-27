@@ -2,7 +2,7 @@
   "type": "module",
   "name": "in-queue",
   "version": "1.0.0",
-  "description": "A simple queue data structure implementation in TypeScript.",
+  "description": "A simple queue data structure  with support for async iteration, event emitting, and batch processing.",
   "main": "./src/queue.js",
   "scripts": {
     "build": "tsc"
@@ -16,7 +16,8 @@
     "fifo",
     "data-structure",
     "simple-queue",
-    "in-queue"
+    "in-queue",
+    "batch queue"
   ],
   "author": "bajiismail",
   "license": "MIT",

@@ -5,6 +5,7 @@ class Queue<T> {
   private items: T[];
   private waiting: (() => void)[];
   private waitingPush: (() => void)[];
+  private eventListeners: { [event: string]: Function[] };
 
   async *[Symbol.asyncIterator](): AsyncIterableIterator<T> {
     let queue = this;
@@ -19,7 +20,9 @@ class Queue<T> {
     this.waiting = [];
     this.waitingPush = [];
     this.isClear = false;
+    this.eventListeners = {}
   }
+
 
   async get(): Promise<T> {
     if (this.isEmpty()) {
@@ -30,11 +33,14 @@ class Queue<T> {
       const resolve = this.waitingPush.shift()!;
       resolve();
     }
+    this.emit('itemRemoved',value);
     return value;
   }
 
   get_nowait(): T | undefined {
-    return this.items.shift();
+    const value = this.items.shift();
+    if(value) this.emit('itemRemoved',value);
+    return value
   }
 
   async getBatch(count: number = 1): Promise<T[]> {
@@ -43,6 +49,7 @@ class Queue<T> {
       const item = await this.get();
       values.push(item);
     }
+    this.emit('itemsRemoved',values);
     return values;
   }
 
@@ -60,6 +67,7 @@ class Queue<T> {
       const resolve = this.waiting.shift()!;
       resolve();
     }
+    this.emit('itemPushed',item);
   }
 
   push_nowait(item: T): void {
@@ -67,6 +75,14 @@ class Queue<T> {
       throw new Error("QueueFull");
     }
     this.push(item);
+    this.emit('itemPushed',item);
+  }
+
+  async pushBatch(values: T[]): Promise<void> {
+    for (const value of values) {
+      await this.push(value);
+    }
+    this.emit('itemsPushed',values);
   }
 
   isEmpty(): boolean {
@@ -86,6 +102,7 @@ class Queue<T> {
     }
     this.items = []
     this.isClear = false
+    this.emit('queueCleared');
   }
 
   qsize(): number {
@@ -96,6 +113,20 @@ class Queue<T> {
     if (!forceResize && newSize < this.qsize()) throw new Error("SizeError");
     if (truncateItems) this.items = this.items.slice(0, newSize);
     this.maxsize = newSize;
+    this.emit('sizeChanged');
+  }
+
+  on(event: string, listener: Function): void {
+    if (!this.eventListeners[event]) {
+      this.eventListeners[event] = [];
+    }
+    this.eventListeners[event].push(listener);
+  }
+
+  emit(event: string, ...args: any[]): void {
+    if (this.eventListeners[event]) {
+      this.eventListeners[event].forEach((listener) => listener(...args));
+    }
   }
 }
 
