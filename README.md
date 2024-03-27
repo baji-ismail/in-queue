@@ -113,6 +113,18 @@ This method removes and returns the next item from the queue, waiting if the que
 
   This method is useful when you want to retrieve an item from the queue without waiting for it to become available. If the queue is empty, it returns undefined, allowing you to handle empty queue conditions appropriately.
 
+- **getBatch(count = 1)** - Returns an array of items from the queue, waiting for items if necessary until the specified count of items is retrieved.
+
+  ```javascript
+  // Example usage of getBatch
+  async function processBatch() {
+    const batch = await queue.getBatch(3);
+    console.log("Batch:", batch);
+  }
+  ```
+
+  This method retrieves a batch of items from the queue, waiting for items if necessary, until the specified count of items is retrieved. It can be useful when you need to process items in batches rather than one by one.
+
 - **async \*[Symbol.asyncIterator]()** - Returns an asynchronous iterable iterator that allows consuming items from the queue as they become available.
 
   ```javascript

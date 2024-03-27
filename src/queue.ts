@@ -37,6 +37,15 @@ class Queue<T> {
     return this.items.shift();
   }
 
+  async getBatch(count: number = 1): Promise<T[]> {
+    const values: T[] = [];
+    while (values.length < count) {
+      const item = await this.get();
+      values.push(item);
+    }
+    return values;
+  }
+
   peek():T | undefined{
     return this.items[0];
   }
