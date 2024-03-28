@@ -1,4 +1,3 @@
-
 class Queue<T> {
   private maxsize: number;
   private isClear: boolean;
@@ -20,29 +19,42 @@ class Queue<T> {
     this.waiting = [];
     this.waitingPush = [];
     this.isClear = false;
-    this.eventListeners = {}
+    this.eventListeners = {};
   }
 
-
-  async get(): Promise<T> {
+  async get(timeout?: number): Promise<T> {
     if (this.isEmpty()) {
-      await new Promise<void>((resolve) => this.waiting.push(resolve));
+      try {
+        await new Promise<void>((resolve, reject) => {
+          this.waiting.push(resolve);
+          if (timeout) {
+            setTimeout(() => {
+              this.waiting = this.waiting.filter(
+                (oneResolve) => oneResolve != resolve
+              );
+              reject("timeout");
+            }, timeout);
+          }
+        });
+      } catch {
+        throw new Error("Timeout");
+      }
     }
     const value = this.items.shift()!;
     if (this.waitingPush.length > 0) {
       const resolve = this.waitingPush.shift()!;
       resolve();
     }
-    this.emit('itemRemoved',value);
-    if (this.isEmpty()) this.emit('empty');
+    this.emit("itemRemoved", value);
+    if (this.isEmpty()) this.emit("empty");
     return value;
   }
 
   get_nowait(): T | undefined {
     const value = this.items.shift();
-    if(value) this.emit('itemRemoved',value);
-    if (value && this.isEmpty()) this.emit('empty');
-    return value
+    if (value) this.emit("itemRemoved", value);
+    if (value && this.isEmpty()) this.emit("empty");
+    return value;
   }
 
   async getBatch(count: number = 1): Promise<T[]> {
@@ -51,40 +63,55 @@ class Queue<T> {
       const item = await this.get();
       values.push(item);
     }
-    this.emit('itemsRemoved',values);
+    this.emit("itemsRemoved", values);
     return values;
   }
 
-  peek():T | undefined{
+  peek(): T | undefined {
     return this.items[0];
   }
-  
-  async push(item: T): Promise<void> {
+
+  async push(item: T, timeout?: number): Promise<void> {
     if (this.isFull()) {
-      await new Promise<void>((resolve) => this.waitingPush.push(resolve))
+      try {
+        await new Promise<void>((resolve, reject) => {
+          this.waitingPush.push(resolve);
+
+          if (timeout) {
+            setTimeout(() => {
+              this.waitingPush = this.waitingPush.filter(
+                (oneResolve) => oneResolve != resolve
+              );
+              reject("timeout");
+            }, timeout);
+          }
+        });
+      } catch {
+        throw new Error("Timeout");
+      }
     }
-    if(this.isClear) throw new Error("ValuesHasClear")
+    if (this.isClear) throw new Error("ValuesHasClear");
     this.items.push(item);
-    if (this.isFull()) this.emit('full');
+    if (this.isFull()) this.emit("full");
     if (this.waiting.length > 0) {
       const resolve = this.waiting.shift()!;
       resolve();
     }
-    this.emit('itemPushed',item);
+    this.emit("itemPushed", item);
   }
 
   push_nowait(item: T): void {
-    if (this.isFull())   throw new Error("QueueFull");
+    if (this.isFull()) throw new Error("QueueFull");
     this.push(item);
-    if (this.isFull()) this.emit('full');
-    this.emit('itemPushed',item);
+    if (this.isFull()) this.emit("full");
+    this.emit("itemPushed", item);
   }
 
   async pushBatch(values: T[]): Promise<void> {
     for (const value of values) {
       await this.push(value);
     }
-    this.emit('itemsPushed',values);
+    this.emit("itemsPushed", values);
   }
 
   isEmpty(): boolean {
@@ -96,15 +123,15 @@ class Queue<T> {
     return this.qsize() >= this.maxsize;
   }
 
-  clear(){
-    this.isClear = true
+  clear() {
+    this.isClear = true;
     for (let index = 0; index < this.waitingPush.length; index++) {
       const resolve = this.waitingPush.shift()!;
-      resolve()
+      resolve();
     }
-    this.items = []
-    this.isClear = false
-    this.emit('queueCleared');
+    this.items = [];
+    this.isClear = false;
+    this.emit("queueCleared");
   }
 
   qsize(): number {
@@ -115,7 +142,7 @@ class Queue<T> {
     if (!forceResize && newSize < this.qsize()) throw new Error("SizeError");
     if (truncateItems) this.items = this.items.slice(0, newSize);
     this.maxsize = newSize;
-    this.emit('sizeChanged');
+    this.emit("sizeChanged");
   }
 
   on(event: string, listener: Function): void {

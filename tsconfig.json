@@ -10,7 +10,9 @@
     "moduleResolution": "node",
     "lib": [
         "esnext",
-        "esnext.asynciterable"
+        "esnext.asynciterable",
+        "dom", 
+        "es2015"
     ]
   },
   "include": ["src/**/*.ts"],

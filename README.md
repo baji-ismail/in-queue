@@ -4,6 +4,16 @@ Like a stack, the queue is a linear data structure that stores items in a First 
 
 ![Logo](https://media.geeksforgeeks.org/wp-content/cdn-uploads/gq/2014/02/Queue.png)
 
+## Installation
+
+You can install the package using npm or yarn:
+
+```sh
+npm install in-queue
+# or
+yarn add in-queue
+```
+
 ## Usage/Examples
 
 ```javascript
@@ -60,17 +70,37 @@ console.log(item1, item2, item3, item4); // Output: 1 2 3 4
 
 This class provides methods for adding and removing items from the queue, checking if the queue is empty or full, getting the size of the queue, and more. It can be used to manage a collection of items in a FIFO fashion, where the first item added is the first to be removed.
 
-- **push(item)** - Adds an item to the queue. If the queue is full, it will wait until a slot is available.
+- **push(item,timeout?: number)** - Adds an item to the queue. If the queue is full, it will wait until a slot is available. If a timeout value (in milliseconds) is provided and the queue remains full for longer than the specified time, it will throw a "Timeout" error.
 
   ```javascript
-  // Append items to the queue
-  async function append(item) {
+  // Append items to the queue without timeout
+  async function appendWithoutTimeout(item) {
     await queue.push(item);
     console.log(`Successfully appended ${item}`);
   }
+
+  // Usage
+  appendWithoutTimeout(1); // Output: Successfully appended 1
   ```
 
-This method adds an item to the queue, waiting if the queue is currently full. It is useful for adding items to the queue in a synchronous manner, ensuring that the queue does not exceed its maximum size.
+  ***
+
+  ```javascript
+  // Append items to the queue with timeout
+  async function appendWithTimeout(item) {
+    try {
+      await queue.push(item, 2000); // Wait for 2 seconds
+      console.log(`Successfully appended ${item}`);
+    } catch (error) {
+      console.error("Failed to append item due to timeout");
+    }
+  }
+
+  // Usage
+  appendWithTimeout(2); // Output: Successfully appended 2 (if queue is not full)
+  ```
+
+This method adds an item to the queue, waiting if the queue is currently full. If a timeout value is specified and the queue remains full for longer than the specified time, it will throw a "Timeout" error. It is useful for adding items to the queue in a synchronous manner, ensuring that the queue does not exceed its maximum size, and providing control over the maximum wait time.
 
 - **push_nowait(item)** - Adds an item to the queue if the queue is not full. If the queue is full, it throws an error.
 
@@ -86,18 +116,6 @@ This method adds an item to the queue, waiting if the queue is currently full. I
 
   This method is useful when you want to add an item to the queue without waiting for a slot to become available. If the queue is full, it throws an error, allowing you to handle full queue conditions appropriately.
 
-- **push(item)** - Adds an item to the queue. If the queue is full, it will wait until a slot is available.
-
-  ```javascript
-  // Append items to the queue
-  async function append(item) {
-    await queue.push(item);
-    console.log(`Successfully appended ${item}`);
-  }
-  ```
-
-This method adds an item to the queue, waiting if the queue is currently full. It is useful for adding items to the queue in a synchronous manner, ensuring that the queue does not exceed its maximum size.
-
 - **pushBatch(arrayValues)** - Adds an array of items to the queue. If the queue is full, it will wait until slots are available.
 
 ```typescript
@@ -111,18 +129,33 @@ pushItems([1, 2, 3, 4, 5]);
 
 This explanation highlights that `pushBatch` allows you to push multiple items to the queue at once, and it will wait for space to become available if the queue is full.
 
-- **get()** - Removes and returns an item from the queue. If the queue is empty, it will wait until an item is available.
+- **get(timeout?: number)** - Removes and returns an item from the queue. If the queue is empty, it will wait until an item is available. If a timeout value (in milliseconds) is provided and the item is not available within the specified time, it will throw a "Timeout" error.
 
   ```javascript
-  // Pop items from the queue
+  // Pop items from the queue without a timeout
   async function consume() {
     console.log("Waiting for an item from the queue...");
-    const item = await queue.get();
+    const item = await queue.get(); // Wait indefinitely until an item is available
     console.log(`Got item: ${item}`);
   }
   ```
 
-This method removes and returns the next item from the queue, waiting if the queue is currently empty. It is useful for consuming items from the queue in a synchronous manner, ensuring that the queue is not accessed when empty.
+  ***
+
+  ```javascript
+  // Pop items from the queue with a timeout
+  async function consume() {
+    try {
+      console.log("Waiting for an item from the queue...");
+      const item = await queue.get(5000); // Wait for 5 seconds (5000 milliseconds)
+      console.log(`Got item: ${item}`);
+    } catch (error) {
+      console.error("Timeout waiting for item from the queue");
+    }
+  }
+  ```
+
+This method removes and returns the next item from the queue, waiting if the queue is currently empty. If a timeout value is provided and the item is not available within the specified time, it throws a "Timeout" error. It is useful for consuming items from the queue with a maximum waiting time.
 
 - **get_nowait()** - Removes and returns an item from the queue if the queue is not empty. If the queue is empty, it returns undefined.
 
@@ -374,3 +407,14 @@ This method returns the current number of items in the queue. It can be used to 
   ```
 
 This method allows you to listen for specific events that occur in the queue, such as when an item is pushed or removed. The listener function can perform actions based on these events, providing a way to react to changes in the queue.
+
+## Contributing
+
+Contributions are welcome! To contribute to `in-queue`, follow these steps:
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature`)
+3. Make your changes
+4. Commit your changes (`git commit -am 'Add new feature'`)
+5. Push to the branch (`git push origin feature`)
+6. Create a new Pull Request
