@@ -34,12 +34,14 @@ class Queue<T> {
       resolve();
     }
     this.emit('itemRemoved',value);
+    if (this.isEmpty()) this.emit('empty');
     return value;
   }
 
   get_nowait(): T | undefined {
     const value = this.items.shift();
     if(value) this.emit('itemRemoved',value);
+    if (value && this.isEmpty()) this.emit('empty');
     return value
   }
 
@@ -63,6 +65,7 @@ class Queue<T> {
     }
     if(this.isClear) throw new Error("ValuesHasClear")
     this.items.push(item);
+    if (this.isFull()) this.emit('full');
     if (this.waiting.length > 0) {
       const resolve = this.waiting.shift()!;
       resolve();
@@ -71,10 +74,9 @@ class Queue<T> {
   }
 
   push_nowait(item: T): void {
-    if (this.isFull()) {
-      throw new Error("QueueFull");
-    }
+    if (this.isFull())   throw new Error("QueueFull");
     this.push(item);
+    if (this.isFull()) this.emit('full');
     this.emit('itemPushed',item);
   }
 

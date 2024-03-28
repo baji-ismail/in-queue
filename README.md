@@ -312,6 +312,41 @@ This method returns the current number of items in the queue. It can be used to 
   // The 'itemsPushed' event will be emitted with the pushed items when all items are successfully added to the queue.
   ```
 
+  - `full ` - Emitted when the queue becomes full, i.e., when the number of items in the queue reaches its maximum size.
+
+  ```javascript
+  // Example usage of 'full' event
+  queue.on("full", () => {
+    console.log("Queue is full!");
+  });
+
+  // Assume a maximum size of 10 for this example
+  queue.setSize(10); // Set the maximum size of the queue to 10
+
+  // Push items to the queue until it becomes full
+  for (let i = 0; i < 10; i++) {
+    await queue.push(i);
+  }
+  // The 'full' event will be emitted when the queue reaches its maximum size.
+  ```
+
+  - `empty ` - Emitted when the queue becomes empty, i.e., when the last item is removed from the queue.
+
+  ```javascript
+  // Example usage of 'empty' event
+  queue.on("empty", () => {
+    console.log("Queue is empty!");
+  });
+
+  // Assume the queue is initially populated with items
+
+  // Remove all items from the queue until it becomes empty
+  while (!queue.isEmpty()) {
+    await queue.get();
+  }
+  // The 'empty' event will be emitted when the last item is removed from the queue.
+  ```
+
   - `queueCleared` - Emitted when all items are removed from the queue, clearing the queue.
 
   ```javascript
