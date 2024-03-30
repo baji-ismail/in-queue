@@ -1,11 +1,13 @@
 {
   "type": "module",
   "name": "in-queue",
-  "version": "1.0.9",
+  "preset": "ts-jest",
+  "version": "1.1.0",
   "description": "A versatile queue data structure with support for asynchronous iteration, event emission, and batch processing. This queue offers dynamic resizing, timeout handling for push and get operations, and robust error handling. It provides a flexible and efficient way to manage data in a First In First Out (FIFO) fashion, ensuring optimal performance in various asynchronous scenarios.",
   "main": "./src/queue.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest"
   },
   "keywords": [
     "queue",
@@ -33,6 +35,12 @@
   "license": "MIT",
   "repository": "https://github.com/baji-ismail/in-queue.git",
   "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
     "typescript": "^5.4.3"
   }
 }

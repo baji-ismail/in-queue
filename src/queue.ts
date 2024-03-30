@@ -13,16 +13,15 @@ type EventType =
  */
 class Queue<T> {
   private maxsize: number;
-  private isClear: boolean;
-  private items: T[];
-  private waiting: (() => void)[];
-  private waitingPush: (() => void)[];
-  private eventListeners: { [event: string]: Function[] };
+  private isClear: boolean = false;
+  private items: T[] = [];
+  private waiting: (() => void)[] = [];
+  private waitingPush: (() => void)[] = [];
+  private eventListeners: { [event: string]: ((arg?: T | T[]) => void)[] } = {};
 
   async *[Symbol.asyncIterator](): AsyncIterableIterator<T> {
-    let queue = this;
     while (true) {
-      yield await queue.get();
+      yield await this.get();
     }
   }
 
@@ -33,11 +32,6 @@ class Queue<T> {
    */
   constructor({ maxsize = 0 }: { maxsize?: number } = {}) {
     this.maxsize = maxsize;
-    this.items = [];
-    this.waiting = [];
-    this.waitingPush = [];
-    this.isClear = false;
-    this.eventListeners = {};
   }
 
   /**
@@ -262,7 +256,7 @@ class Queue<T> {
    * @event empty Emitted when the queue becomes empty.
    */
 
-  on(event: EventType, listener: Function): void {
+  on(event: EventType, listener: (arg?: T | T[]) => void): void {
     if (!this.eventListeners[event]) {
       this.eventListeners[event] = [];
     }
@@ -275,9 +269,9 @@ class Queue<T> {
    * @param {string} event The name of the event to emit.
    * @param {...any} args The arguments to pass to the event listeners.
    */
-  emit(event: EventType, ...args: any[]): void {
+  emit(event: EventType, args?: T | T[]): void {
     if (this.eventListeners[event]) {
-      this.eventListeners[event].forEach((listener) => listener(...args));
+      this.eventListeners[event].forEach((listener) => listener(args));
     }
   }
 }
