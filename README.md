@@ -4,6 +4,8 @@ Like a stack, the queue is a linear data structure that stores items in a First 
 
 ![Logo](https://media.geeksforgeeks.org/wp-content/cdn-uploads/gq/2014/02/Queue.png)
 
+[![CI](https://github.com/baji-ismail/in-queue/actions/workflows/ci.yml/badge.svg)](https://github.com/baji-ismail/in-queue/actions/workflows/ci.yml)
+
 ## Installation
 
 You can install the package using npm or yarn:
