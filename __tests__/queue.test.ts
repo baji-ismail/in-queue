@@ -7,6 +7,42 @@ describe("Queue", () => {
     queue = new Queue<number>();
   });
 
+  it("should check if the queue is full", () => {
+    expect(queue.isFull()).toBe(false);
+    queue.setSize(2);
+    queue.push(1);
+    queue.push(2);
+    expect(queue.isFull()).toBe(true);
+  });
+
+  it("should clear the queue", () => {
+    queue.push(1);
+    queue.push(2);
+    queue.clear();
+    expect(queue.isEmpty()).toBe(true);
+  });
+
+  it("should throw an error when newSize is smaller than the current number of items in the queue", () => {
+    queue.push(1);
+    queue.push(2);
+    expect(() => queue.setSize(1)).toThrow("SizeError");
+  });
+
+  it("should change the maximum size of the queue", () => {
+    queue.push(1);
+    queue.push(2);
+    queue.setSize(1, true, true);
+    expect(queue.qsize()).toBe(1);
+  });
+});
+
+describe("Queue FIFO", () => {
+  let queue: Queue<number>;
+
+  beforeEach(() => {
+    queue = new Queue<number>();
+  });
+
   it("should add and remove items correctly", async () => {
     queue.push(1);
     queue.push(2);
@@ -39,32 +75,46 @@ describe("Queue", () => {
     queue.push(1);
     expect(queue.isEmpty()).toBe(false);
   });
+});
 
-  it("should check if the queue is full", () => {
-    expect(queue.isFull()).toBe(false);
-    queue.setSize(2);
-    queue.push(1);
-    queue.push(2);
-    expect(queue.isFull()).toBe(true);
+describe("Queue LIFO", () => {
+  let queue: Queue<number>;
+
+  beforeEach(() => {
+    queue = new Queue<number>({ queueType: "LIFO" });
   });
 
-  it("should clear the queue", () => {
+  it("should add and remove items correctly", async () => {
     queue.push(1);
     queue.push(2);
-    queue.clear();
+    expect(await queue.get()).toBe(2);
+    expect(await queue.get()).toBe(1);
+  });
+
+  it("should add and remove items without waiting", () => {
+    queue.push_nowait(1);
+    queue.push_nowait(2);
+    expect(queue.get_nowait()).toBe(2);
+    expect(queue.get_nowait()).toBe(1);
+  });
+
+  it("should add and remove items in batch correctly", async () => {
+    queue.push(1);
+    queue.push(2);
+    const batch = await queue.getBatch(2);
+    expect(batch).toEqual([2, 1]);
+  });
+
+  it("should peek at the next item without removing it", async () => {
+    queue.push(1);
+    expect(queue.peek()).toBe(1);
+    expect(await queue.get()).toBe(1);
+  });
+
+  it("should check if the queue is empty", () => {
     expect(queue.isEmpty()).toBe(true);
-  });
-
-  it("should throw an error when newSize is smaller than the current number of items in the queue", () => {
     queue.push(1);
-    queue.push(2);
-    expect(() => queue.setSize(1)).toThrow("SizeError");
-  });
-  it("should change the maximum size of the queue", () => {
-    queue.push(1);
-    queue.push(2);
-    queue.setSize(1, true, true);
-    expect(queue.qsize()).toBe(1);
+    expect(queue.isEmpty()).toBe(false);
   });
 });
 

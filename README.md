@@ -1,10 +1,18 @@
 # IN QUEUE
 
-Like a stack, the queue is a linear data structure that stores items in a First In First Out (FIFO) manner. With a queue, the least recently added item is removed first. A good example of a queue is any queue of consumers for a resource where the consumer that came first is served first.
+Like a stack, the queue is a linear data structure that stores items in either a First In First Out (FIFO) or Last In First Out (LIFO) manner. With FIFO, the least recently added item is removed first, while with LIFO, the most recently added item is removed first. A good example of a FIFO queue is any queue of consumers for a resource where the consumer that came first is served first.
 
-![Logo](https://media.geeksforgeeks.org/wp-content/cdn-uploads/gq/2014/02/Queue.png)
+<div align="center">
 
-[![CI](https://github.com/baji-ismail/in-queue/actions/workflows/ci.yml/badge.svg)](https://github.com/baji-ismail/in-queue/actions/workflows/ci.yml)
+![Logo](https://raw.githubusercontent.com/baji-ismail/in-queue/main/img.png)
+
+</div>
+
+<div align="center">
+
+[![CI](https://github.com/baji-ismail/in-queue/actions/workflows/ci.yml/badge.svg)](https://github.com/baji-ismail/in-queue/actions/workflows/ci.yml) [![version](https://img.shields.io/npm/v/in-queue.svg)](https://www.npmjs.com/package/in-queue) [![in-queue downloads](https://img.shields.io/npm/dm/in-queue.svg?label=npm%20i%20in-queue)](https://npm-stat.com/charts.html?package=in-queue&package=in-queue-pure&package=in-queue-compat&from=2014-11-18)
+
+</div>
 
 ## Installation
 
@@ -62,15 +70,19 @@ console.log(item1, item2, item3, item4); // Output: 1 2 3 4
 - **Queue** -
 
   - maxsize (optional, default: 0) - The maximum size of the queue. Use 0 for unlimited size.
+  - queueType (optional, default: "FIFO") - The type of queue. Can be either "FIFO" for First In First Out or "LIFO" for Last In First Out.
 
   ```javascript
   import Queue from "in-queue";
 
-  // Create a new queue with a maximum size of 3
-  const queue = new Queue({ maxsize: 3 });
+  // Create a new FIFO queue with a maximum size of 3
+  const fifoQueue = new Queue({ maxsize: 3 });
+
+  // Create a new LIFO queue with a maximum size of 5
+  const lifoQueue = new Queue({ maxsize: 5, queueType: "LIFO" });
   ```
 
-This class provides methods for adding and removing items from the queue, checking if the queue is empty or full, getting the size of the queue, and more. It can be used to manage a collection of items in a FIFO fashion, where the first item added is the first to be removed.
+This class provides methods for adding and removing items from the queue, checking if the queue is empty or full, getting the size of the queue, and more. It can be used to manage a collection of items in either a FIFO or LIFO fashion, depending on the specified queueType.
 
 - **push(item,timeout?: number)** - Adds an item to the queue. If the queue is full, it will wait until a slot is available. If a timeout value (in milliseconds) is provided and the queue remains full for longer than the specified time, it will throw a "Timeout" error.
 

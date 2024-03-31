@@ -7,12 +7,16 @@ type EventType =
   | "queueCleared"
   | "full"
   | "empty";
+
+type QueueType = "FIFO" | "LIFO";
+
 /**
  * Represents a queue data structure that follows the First In First Out (FIFO) principle.
  * @template T The type of elements stored in the queue.
  */
 class Queue<T> {
   private maxsize: number;
+  private queueType: QueueType = "FIFO";
   private isClear: boolean = false;
   private items: T[] = [];
   private waiting: (() => void)[] = [];
@@ -29,9 +33,14 @@ class Queue<T> {
    * Creates an instance of Queue.
    * @param {Object} [options] The options for configuring the queue.
    * @param {number} [options.maxsize=0] The maximum size of the queue. Use 0 for unlimited size.
+   * @param {"FIFO" | "LIFO"} [options.queueType="FIFO"] - The type of queue: "FIFO" for First In First Out or "LIFO" for Last In First Out.
    */
-  constructor({ maxsize = 0 }: { maxsize?: number } = {}) {
+  constructor({
+    maxsize = 0,
+    queueType = "FIFO",
+  }: { maxsize?: number; queueType?: QueueType } = {}) {
     this.maxsize = maxsize;
+    this.queueType = queueType;
   }
 
   /**
@@ -142,7 +151,10 @@ class Queue<T> {
       }
     }
     if (this.isClear) throw new Error("ValuesHasClear");
-    this.items.push(item);
+
+    if (this.queueType == "FIFO") this.items.push(item);
+    else this.items.unshift(item);
+
     if (this.isFull()) this.emit("full");
     if (this.waiting.length > 0) {
       const resolve = this.waiting.shift()!;
@@ -160,7 +172,10 @@ class Queue<T> {
 
   push_nowait(item: T): void {
     if (this.isFull()) throw new Error("QueueFull");
-    this.push(item);
+
+    if (this.queueType == "FIFO") this.items.push(item);
+    else this.items.unshift(item);
+
     if (this.isFull()) this.emit("full");
     this.emit("itemPushed", item);
   }
