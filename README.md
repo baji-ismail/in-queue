@@ -10,7 +10,7 @@ Like a stack, the queue is a linear data structure that stores items in either a
 
 <div align="center">
 
-[![CI](https://github.com/baji-ismail/in-queue/actions/workflows/ci.yml/badge.svg)](https://github.com/baji-ismail/in-queue/actions/workflows/ci.yml) [![version](https://img.shields.io/npm/v/in-queue.svg)](https://www.npmjs.com/package/in-queue) [![in-queue downloads](https://img.shields.io/npm/dm/in-queue.svg?label=npm%20i%20in-queue)](https://npm-stat.com/charts.html?package=in-queue&package=in-queue-pure&package=in-queue-compat&from=2014-11-18)
+[![CI](https://github.com/baji-ismail/in-queue/actions/workflows/ci.yml/badge.svg)](https://github.com/baji-ismail/in-queue/actions/workflows/ci.yml) [![version](https://img.shields.io/npm/v/in-queue.svg)](https://www.npmjs.com/package/in-queue) [![in-queue downloads](https://img.shields.io/npm/dw/in-queue.svg?label=Downloads)](https://npm-stat.com/charts.html?package=in-queue&package=in-queue-pure&package=in-queue-compat&from=2014-11-18)
 
 </div>
 
