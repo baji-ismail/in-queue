@@ -2,12 +2,13 @@
   "type": "module",
   "name": "in-queue",
   "preset": "ts-jest",
-  "version": "1.2.0",
+  "version": "1.2.3",
   "description": "A lightweight queue package supporting both FIFO (First In First Out) and LIFO (Last In First Out) operations. Features include asynchronous iteration, event emission, and batch processing. The queue dynamically resizes, handles push and get timeouts, and offers robust error handling. Designed for optimal performance in asynchronous scenarios.",
-  "main": "./src/queue.js",
+  "main": "./dist/queue.js",
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "publish": "npm test && npm run build && npm publish"
   },
   "keywords": [
     "queue",
@@ -33,10 +34,16 @@
     "error handling",
     "performance optimization"
   ],
+  "files": [
+    "dist/**/*"
+  ],
   "author": "bajiismail",
   "license": "MIT",
   "repository": "https://github.com/baji-ismail/in-queue.git",
   "devDependencies": {
+    "@babel/core": "^7.24.3",
+    "@babel/preset-env": "^7.24.3",
+    "@babel/register": "^7.23.7",
     "@types/jest": "^29.5.12",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.4.0",

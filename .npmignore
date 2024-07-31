@@ -1,2 +1,8 @@
-/node_modules
-/src/queue.js
+src
+node_modules
+tsconfig.json
+.gitignore
+.npmignore
+.babelrc
+.eslintrc.cjs
+jest.config.js
